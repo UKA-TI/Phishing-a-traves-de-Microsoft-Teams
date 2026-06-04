@@ -1,0 +1,758 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Alerta de Seguridad: Phishing a través de Microsoft Teams</title>
+  
+  <!-- Google Fonts: Inter & Plus Jakarta Sans -->
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&family=Plus+Jakarta+Sans:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+  
+  <!-- Tailwind CSS (Para utilidades de alineación e interactividad) -->
+  <script src="https://cdn.tailwindcss.com"></script>
+  
+  <style>
+    /* Estilos Corporativos Solicitados */
+    :root {
+        --uka-blue: #0077C9;
+        --uka-yellow: #FECE00;
+        --uka-dark: #1e293b;
+        --uka-gray-dark: #444444;
+        --uka-gray-light: #f1f5f9;
+        --uka-border: #e2e8f0;
+        --uka-white: #ffffff;
+        --shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1);
+        --shadow-lg: 0 20px 25px -5px rgba(0, 0, 0, 0.1);
+    }
+
+    * {
+        box-sizing: border-box;
+        margin: 0;
+        padding: 0;
+    }
+
+    body {
+        font-family: 'Inter', sans-serif;
+        background-color: #f8fafc;
+        color: var(--uka-gray-dark);
+        line-height: 1.6;
+        padding: 15px;
+    }
+
+    .container {
+        max-width: 1100px;
+        margin: 0 auto;
+        background: var(--uka-white);
+        border-radius: 20px;
+        box-shadow: var(--shadow-lg);
+        overflow: hidden;
+        border: 1px solid var(--uka-border);
+    }
+
+    /* ESTILOS DE CABECERA PERSONALIZADOS ACTUALIZADOS */
+    .header-custom {
+        background: var(--uka-yellow);
+        padding: 30px 40px;
+        border-bottom: 8px solid var(--uka-blue);
+        display: flex;
+        align-items: center;
+        justify-content: flex-start;
+        gap: 30px;
+        flex-wrap: wrap;
+    }
+
+    .header-logo-custom img {
+        max-height: 65px;
+        width: auto;
+        display: block;
+    }
+
+    .header-titles-custom {
+        flex-grow: 1;
+        min-width: 280px;
+    }
+
+    .header-titles-custom h1 {
+        color: var(--uka-blue);
+        font-size: clamp(1.6rem, 4vw, 2.4rem);
+        font-weight: 800;
+        letter-spacing: -1.2px;
+        margin-bottom: 5px;
+        font-family: 'Plus Jakarta Sans', sans-serif;
+        line-height: 1.2;
+    }
+
+    .header-titles-custom p {
+        color: var(--uka-dark);
+        font-weight: 600;
+        font-size: 1.1rem;
+    }
+
+    .hero {
+        padding: 25px 40px;
+        background: var(--uka-gray-light);
+        border-bottom: 1px solid var(--uka-border);
+        display: flex;
+        align-items: center;
+        gap: 20px;
+    }
+
+    .hero-icon {
+        font-size: 2.2rem;
+        background: var(--uka-white);
+        min-width: 65px;
+        height: 65px;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        border-radius: 14px;
+        box-shadow: var(--shadow);
+    }
+
+    .section {
+        padding: 40px;
+    }
+
+    .section-header {
+        display: flex;
+        align-items: center;
+        gap: 15px;
+        margin-bottom: 30px;
+    }
+
+    .section-header h2 {
+        color: var(--uka-blue);
+        font-size: 1.4rem;
+        font-weight: 800;
+        text-transform: uppercase;
+        white-space: nowrap;
+    }
+
+    .section-line {
+        flex-grow: 1;
+        height: 2px;
+        background: var(--uka-yellow);
+    }
+
+    .grid-standard {
+        display: grid;
+        grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+        gap: 20px;
+    }
+
+    .card {
+        background: var(--uka-white);
+        padding: 25px;
+        border-radius: 16px;
+        border: 1px solid var(--uka-border);
+    }
+
+    .card h3 {
+        margin-bottom: 12px;
+        font-size: 1.15rem;
+        color: var(--uka-dark);
+        font-weight: 700;
+    }
+
+    .card-risk {
+        border-left: 5px solid var(--uka-dark);
+        background: #fafafa;
+    }
+
+    .card-good {
+        border-left: 5px solid var(--uka-blue);
+    }
+
+    .social-card {
+        background: var(--uka-white);
+        border: 1px solid var(--uka-border);
+        border-radius: 12px;
+        overflow: hidden;
+        display: flex;
+        flex-direction: column;
+        text-decoration: none;
+        color: inherit;
+        transition: all 0.3s ease;
+    }
+
+    .social-card:hover {
+        transform: translateY(-4px);
+        box-shadow: var(--shadow);
+        border-color: var(--uka-blue);
+    }
+
+    .card-image-box {
+        width: 100%;
+        height: 170px;
+        background: #f1f5f9;
+        overflow: hidden;
+    }
+
+    .card-image-box img {
+        width: 100%;
+        height: 100%;
+        object-fit: cover;
+        display: block;
+        transition: transform 0.5s ease;
+    }
+
+    .social-card:hover .card-image-box img {
+        transform: scale(1.05);
+    }
+
+    .card-body {
+        padding: 20px;
+        flex-grow: 1;
+    }
+
+    .card-body h3 {
+        font-size: 1.05rem;
+        color: var(--uka-blue);
+        margin-bottom: 8px;
+    }
+
+    .card-body p {
+        font-size: 0.88rem;
+        color: #475569;
+        line-height: 1.5;
+    }
+
+    .alert-box {
+        background: var(--uka-blue);
+        margin-top: 30px;
+        padding: 30px;
+        border-radius: 16px;
+        display: flex;
+        align-items: center;
+        gap: 20px;
+        border: 4px solid var(--uka-yellow);
+        color: white;
+    }
+
+    .alert-box .title {
+        color: var(--uka-yellow);
+        font-weight: 800;
+        display: block;
+        margin-bottom: 5px;
+        font-size: 1.2rem;
+    }
+
+    /* FOOTER INSTITUCIONAL */
+    .footer-custom {
+        background: var(--uka-blue);
+        color: white;
+        padding: 40px;
+        text-align: center;
+    }
+
+    .footer-logo img {
+        max-height: 60px;
+        width: auto;
+        display: block;
+        margin: 0 auto 15px auto;
+        filter: brightness(0) invert(1);
+    }
+
+    .btn-reporte {
+        display: inline-block;
+        padding: 12px 25px;
+        border: 2px solid var(--uka-yellow);
+        color: var(--uka-yellow);
+        text-decoration: none;
+        font-weight: 700;
+        border-radius: 8px;
+        margin-top: 10px;
+        transition: all 0.3s ease;
+    }
+
+    .btn-reporte:hover {
+        background: var(--uka-yellow);
+        color: var(--uka-blue);
+    }
+
+    .footer-tag {
+        font-size: 0.75rem;
+        color: rgba(255, 255, 255, 0.6);
+        margin-top: 20px;
+        display: block;
+    }
+
+    @media (max-width: 650px) {
+        .hero {
+            flex-direction: column;
+            text-align: center;
+        }
+
+        .section {
+            padding: 25px 20px;
+        }
+
+        .alert-box {
+            flex-direction: column;
+            text-align: center;
+        }
+    }
+
+    /* Estilos Adicionales Premium para el Simulador de Teams */
+    .teams-header-color {
+      background-color: var(--uka-blue);
+    }
+    .badge-interactive {
+      cursor: pointer;
+      transition: all 0.2s ease;
+    }
+    .badge-interactive:hover {
+      background-color: var(--uka-yellow);
+      color: var(--uka-blue);
+    }
+    .custom-scrollbar::-webkit-scrollbar {
+      width: 6px;
+    }
+    .custom-scrollbar::-webkit-scrollbar-thumb {
+      background-color: #cbd5e1;
+      border-radius: 3px;
+    }
+  </style>
+</head>
+<body class="bg-[#f8fafc] text-slate-700 antialiased min-h-screen">
+
+  <div class="container">
+    
+    <!-- HEADER -->
+    <header class="header-custom">
+        <div class="header-logo-custom">
+            <img src="https://unkilodeayuda.org.mx/UKA_F_Inst_fa_RGB.png" alt="Logo Un Kilo de Ayuda">
+        </div>
+        <div class="header-titles-custom">
+            <h1>Alerta de Seguridad: Phishing a través de Microsoft Teams</h1>
+            <p>Impulsando la innovación con seguridad y ética institucional</p>
+        </div>
+    </header>
+
+    <!-- HERO INTRODUCTION -->
+    <div class="hero">
+      <div class="hero-icon">🚨</div>
+      <div>
+        <p class="text-slate-800 font-bold text-lg leading-snug">
+          Hemos detectado una campaña de phishing activa que ya no llega solo por correo electrónico.
+        </p>
+        <p class="text-sm text-slate-600 mt-1">
+          Atacantes externos están utilizando <strong class="text-[#0077C9]">Microsoft Teams</strong> para suplantar identidades de compañeros, jefes o directivos con el fin de obtener información financiera confidencial o exigir transferencias monetarias urgentes.
+        </p>
+      </div>
+    </div>
+
+    <!-- SECCIÓN 1: INTERACTIVE SIMULATOR -->
+    <section class="section">
+      <div class="section-header">
+        <h2>Simulador de Amenazas Teams</h2>
+        <div class="section-line"></div>
+      </div>
+      
+      <p class="text-sm text-slate-600 mb-6 -mt-2">
+        👇 <strong>Haz clic sobre los círculos parpadeantes rojos</strong> en el chat simulado de Teams para descubrir cómo identificar los elementos sospechosos de un ataque real.
+      </p>
+
+      <!-- SIMULATOR LAYOUT -->
+      <div class="border border-slate-200 rounded-2xl overflow-hidden shadow-md bg-white max-w-3xl mx-auto">
+        <!-- Teams simulated Header -->
+        <div class="teams-header-color text-white px-4 py-3 flex items-center justify-between">
+          <div class="flex items-center gap-2">
+            <div class="w-2.5 h-2.5 rounded-full bg-[#FECE00] animate-pulse"></div>
+            <span class="font-bold text-xs tracking-wider uppercase">Simulador de Phishing en Teams</span>
+          </div>
+          <span class="text-[10px] bg-white/20 px-2 py-0.5 rounded font-bold">Herramienta Didáctica</span>
+        </div>
+
+        <div class="grid grid-cols-4 min-h-[380px]">
+          <!-- Sidebar (Left) -->
+          <div class="col-span-1 bg-slate-50 border-r border-slate-200 p-2 hidden sm:block">
+            <div class="text-[9px] font-bold text-slate-400 uppercase mb-2 px-1">Chats Recientes</div>
+            <div class="bg-white rounded p-1.5 flex items-center gap-1.5 shadow-sm border border-slate-200 mb-1">
+              <div class="relative flex-shrink-0">
+                <div class="w-7 h-7 rounded-full bg-slate-300 flex items-center justify-center text-xs font-bold text-slate-700">JP</div>
+                <span class="absolute bottom-0 right-0 w-2 h-2 rounded-full bg-red-500 border-2 border-white"></span>
+              </div>
+              <div class="overflow-hidden">
+                <div class="text-[10px] font-bold text-slate-900 truncate">Juan Pérez (CEO)</div>
+                <div class="text-[9px] text-red-500 truncate font-semibold">¿Estás en la empresa...</div>
+              </div>
+            </div>
+          </div>
+
+          <!-- Main Chat Area (Right) -->
+          <div class="col-span-4 sm:col-span-3 flex flex-col justify-between p-4 relative bg-white">
+            
+            <!-- Chat Partner Info (HOTSPOT 1) -->
+            <div class="flex items-center justify-between pb-3 border-b border-slate-100 mb-3 relative">
+              <div class="flex items-center gap-2">
+                <div class="w-9 h-9 rounded-full bg-[#0077C9]/10 text-[#0077C9] flex items-center justify-center font-bold text-xs">
+                  JP
+                </div>
+                <div>
+                  <div class="flex items-center gap-1 flex-wrap">
+                    <span class="font-bold text-slate-900 text-xs">Juan Pérez (Director General)</span>
+                    <span class="bg-amber-100 text-amber-800 text-[9px] font-bold px-1.5 py-0.5 rounded border border-amber-200">
+                      Externo
+                    </span>
+                    <!-- Hotspot 1 -->
+                    <span class="relative flex h-3 w-3">
+                      <span class="animate-ping absolute inline-flex h-full w-full rounded-full bg-red-400 opacity-75"></span>
+                      <span class="relative inline-flex rounded-full h-3 w-3 bg-red-500 cursor-pointer" onclick="viewHotspot(1)"></span>
+                    </span>
+                  </div>
+                  <div class="text-[10px] text-slate-500 truncate">juan.perez.corporativo.externo@gmail.com</div>
+                </div>
+              </div>
+            </div>
+
+            <!-- Microsoft System Warning Banner (HOTSPOT 2) -->
+            <div class="bg-amber-50 border-l-4 border-amber-500 p-3 rounded-r-lg mb-4 flex items-start gap-2 relative">
+              <div class="text-amber-600 mt-0.5">
+                <svg class="w-4 h-4" fill="currentColor" viewBox="0 0 20 20">
+                  <path fill-rule="evenodd" d="M8.257 3.099c.765-1.36 2.722-1.36 3.486 0l5.58 9.92c.75 1.334-.213 2.98-1.742 2.98H4.42c-1.53 0-2.493-1.646-1.743-2.98l5.58-9.92zM11 13a1 1 0 11-2 0 1 1 0 012 0zm-1-8a1 1 0 00-1 1v3a1 1 0 002 0V6a1 1 0 00-1-1z" clip-rule="evenodd"/>
+                </svg>
+              </div>
+              <!-- Hotspot 2 -->
+              <span class="absolute -top-1 -right-1 flex h-3 w-3">
+                <span class="animate-ping absolute inline-flex h-full w-full rounded-full bg-red-400 opacity-75"></span>
+                <span class="relative inline-flex rounded-full h-3 w-3 bg-red-500 cursor-pointer" onclick="viewHotspot(2)"></span>
+              </span>
+              <div class="text-[11px] text-amber-900 leading-tight">
+                <p class="font-bold">Este mensaje proviene de alguien de fuera de tu organización.</p>
+                <p class="text-amber-800 mt-0.5">¿Deseas aceptar esta conversación? Ten precaución con las solicitudes financieras.</p>
+              </div>
+            </div>
+
+            <!-- Message list -->
+            <div class="space-y-3 flex-grow text-xs mb-4">
+              <!-- Message 1 (HOTSPOT 3) -->
+              <div class="flex items-start gap-2 max-w-[85%] relative">
+                <!-- Hotspot 3 -->
+                <span class="absolute -top-1 -right-1 flex h-3 w-3">
+                  <span class="animate-ping absolute inline-flex h-full w-full rounded-full bg-red-400 opacity-75"></span>
+                  <span class="relative inline-flex rounded-full h-3 w-3 bg-red-500 cursor-pointer" onclick="viewHotspot(3)"></span>
+                </span>
+                <div class="bg-slate-100 p-2.5 rounded-lg rounded-tl-none text-slate-800 leading-normal">
+                  Hola, ¿cómo estás? ¿Estás en la empresa ahorita?
+                </div>
+              </div>
+
+              <!-- Message 2 (HOTSPOT 4) -->
+              <div class="flex items-start gap-2 max-w-[85%] relative">
+                <!-- Hotspot 4 -->
+                <span class="absolute -top-1 -right-1 flex h-3 w-3">
+                  <span class="animate-ping absolute inline-flex h-full w-full rounded-full bg-red-400 opacity-75"></span>
+                  <span class="relative inline-flex rounded-full h-3 w-3 bg-red-500 cursor-pointer" onclick="viewHotspot(4)"></span>
+                </span>
+                <div class="bg-slate-100 p-2.5 rounded-lg rounded-tl-none text-slate-800 leading-normal">
+                  Necesito que me agregues urgente con el encargado de finanzas de inmediato. El cliente dice que sí y tenemos que cerrar el trato y hacer la transferencia ya. Avísame rápido.
+                </div>
+              </div>
+            </div>
+
+            <!-- Disabled input area -->
+            <div class="pt-2 border-t border-slate-100">
+              <div class="bg-slate-50 border border-slate-200 text-slate-400 text-xs px-3 py-1.5 rounded-md flex justify-between items-center cursor-not-allowed">
+                <span>Escribe tu respuesta de forma segura...</span>
+                <span>🔒</span>
+              </div>
+            </div>
+
+          </div>
+        </div>
+      </div>
+
+      <!-- EXPLANATION PANEL (Styled dynamically) -->
+      <div class="mt-4 max-w-3xl mx-auto">
+        <div id="hotspot-card" class="bg-[#fafafa] border-l-4 border-[#0077C9] rounded-r-xl p-5 shadow-sm transition-all duration-300">
+          <h4 class="font-bold text-slate-900 text-sm mb-1 flex items-center gap-2">
+            <span id="card-icon" class="text-base">💡</span>
+            <span id="card-title">Selecciona un elemento de peligro en el simulador</span>
+          </h4>
+          <p id="card-desc" class="text-xs text-slate-600 leading-relaxed">
+            Te explicaremos paso a paso el porqué de esta alerta para evitar cualquier vulnerabilidad corporativa.
+          </p>
+        </div>
+      </div>
+    </section>
+
+    <!-- SECCIÓN 2: COMO IDENTIFICAR UN MENSAJE (THE 4 KEY POINTS) -->
+    <section class="section bg-slate-50/50 border-t border-b border-slate-100">
+      <div class="section-header">
+        <h2>Señales Clave de Phishing en Teams</h2>
+        <div class="section-line"></div>
+      </div>
+
+      <div class="grid-standard">
+        <!-- Card 1 -->
+        <div class="card card-risk">
+          <div class="flex items-center gap-3 mb-3">
+            <span class="text-xl">🏷️</span>
+            <h3>1. La etiqueta "Externo" / "External"</h3>
+          </div>
+          <p class="text-xs text-slate-600 leading-relaxed">
+            Cuando alguien de fuera te escribe, verás obligatoriamente la etiqueta <strong class="text-slate-900">"Externo"</strong> junto a su nombre. Si dice ser tu jefe o compañero pero aparece la etiqueta, <strong>no lo es</strong>.
+          </p>
+        </div>
+
+        <!-- Card 2 -->
+        <div class="card card-risk">
+          <div class="flex items-center gap-3 mb-3">
+            <span class="text-xl">⚠️</span>
+            <h3>2. La pantalla de advertencia</h3>
+          </div>
+          <p class="text-xs text-slate-600 leading-relaxed">
+            Antes de interactuar por primera vez, Teams te pregunta si deseas aceptar. En casos de peligro, el sistema advertirá: <em>"This appears to be a spam or phishing attempt"</em>. Lee con suma atención.
+          </p>
+        </div>
+
+        <!-- Card 3 -->
+        <div class="card card-risk">
+          <div class="flex items-center gap-3 mb-3">
+            <span class="text-xl">⚡</span>
+            <h3>3. Señales de urgencia / contenido</h3>
+          </div>
+          <p class="text-xs text-slate-600 leading-relaxed">
+            Buscan presionarte con "cierres de tratos inmediatos", "asuntos rápidos", o bien emplean frases genéricas y lenguaje extraño sin mencionar detalles concretos de la operación.
+          </p>
+        </div>
+
+        <!-- Card 4 -->
+        <div class="card card-risk">
+          <div class="flex items-center gap-3 mb-3">
+            <span class="text-xl">👥</span>
+            <h3>4. Chats grupales no solicitados</h3>
+          </div>
+          <p class="text-xs text-slate-600 leading-relaxed">
+            Para evitar ser bloqueados, los estafadores crean chats grupales y te añaden por la fuerza. Si no reconoces a los integrantes, no compartas información ni interactúes. Abandona de inmediato.
+          </p>
+        </div>
+      </div>
+    </section>
+
+    <!-- SECCIÓN 3: PATRONES DE CONTENIDO (SOCIAL CARDS INTERACTIVAS) -->
+    <section class="section">
+      <div class="section-header">
+        <h2>Ejemplos de Mensajes Reales</h2>
+        <div class="section-line"></div>
+      </div>
+
+      <p class="text-sm text-slate-600 mb-6 -mt-2">
+        Los atacantes utilizan patrones conversacionales muy recurrentes. Pon a prueba tus ojos y haz clic en cada tarjeta para ver por qué es fraudulenta.
+      </p>
+
+      <div class="grid-standard">
+        <!-- Ejemplo 1 -->
+        <div class="social-card cursor-pointer" onclick="toggleExample(1)">
+          <div class="card-image-box flex items-center justify-center p-6 text-4xl select-none" id="ex-box-1" style="background-color: #fef3c7;">
+            💬
+          </div>
+          <div class="card-body">
+            <h3 id="ex-title-1">Usa lenguaje genérico</h3>
+            <p class="italic text-xs font-semibold text-slate-800 mb-2">"¿Cómo quedó el asunto de ayer?"</p>
+            <p id="ex-desc-1" class="text-slate-500 text-xs">Hacen preguntas abiertas esperando que tú reveles detalles clave que ellos no conocen.</p>
+          </div>
+        </div>
+
+        <!-- Ejemplo 2 -->
+        <div class="social-card cursor-pointer" onclick="toggleExample(2)">
+          <div class="card-image-box flex items-center justify-center p-6 text-4xl select-none" id="ex-box-2" style="background-color: #fee2e2;">
+            💸
+          </div>
+          <div class="card-body">
+            <h3 id="ex-title-2">Crea urgencia financiera</h3>
+            <p class="italic text-xs font-semibold text-red-600 mb-2">"Cierra el trato y haz la transferencia ya..."</p>
+            <p id="ex-desc-2" class="text-slate-500 text-xs">Buscan evitar que pienses o que verifiques con tu superior mediante la manipulación psicológica.</p>
+          </div>
+        </div>
+
+        <!-- Ejemplo 3 -->
+        <div class="social-card cursor-pointer" onclick="toggleExample(3)">
+          <div class="card-image-box flex items-center justify-center p-6 text-4xl select-none" id="ex-box-3" style="background-color: #e0f2fe;">
+            🔍
+          </div>
+          <div class="card-body">
+            <h3 id="ex-title-3">Solicitud de contactos clave</h3>
+            <p class="italic text-xs font-semibold text-slate-800 mb-2">"¿Puedes agregarme con el de finanzas?"</p>
+            <p id="ex-desc-3" class="text-slate-500 text-xs">Intentan escalar el fraude para dar con los responsables directos de las cuentas de dinero.</p>
+          </div>
+        </div>
+
+        <!-- Ejemplo 4 -->
+        <div class="social-card cursor-pointer" onclick="toggleExample(4)">
+          <div class="card-image-box flex items-center justify-center p-6 text-4xl select-none" id="ex-box-4" style="background-color: #f1f5f9;">
+            🗣️
+          </div>
+          <div class="card-body">
+            <h3 id="ex-title-4">Español no natural</h3>
+            <p class="italic text-xs font-semibold text-slate-800 mb-2">"¿Estás en la empresa ahorita?"</p>
+            <p id="ex-desc-4" class="text-slate-500 text-xs">En vez de usar expresiones internas comunes (como "¿estás en la chamba?"), usan fórmulas frías y literales de traductores.</p>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- SECCIÓN 4: ACCIONES CORPORATIVAS (QUÉ ESTÁ HACIENDO TI) -->
+    <section class="section bg-slate-50/50 border-t border-b border-slate-100">
+      <div class="section-header">
+        <h2>¿Qué estamos haciendo para protegerte?</h2>
+        <div class="section-line"></div>
+      </div>
+
+      <div class="grid-standard">
+        <div class="card card-good">
+          <div class="flex items-center gap-3 mb-2">
+            <span class="p-2 bg-blue-100 text-[#0077C9] rounded-lg text-lg">🛡️</span>
+            <h3>Paso 1 — Bloqueo de chats con externos</h3>
+          </div>
+          <p class="text-xs text-slate-600 leading-relaxed mb-3">
+            Como medida inmediata, configuramos Teams para bloquear por defecto la comunicación con cualquier dominio externo no registrado.
+          </p>
+          <div class="bg-amber-50 text-amber-900 border border-amber-200 text-[11px] p-2 rounded font-medium">
+            ⚠️ Si intentas chatear fuera, verás una advertencia de que la comunicación no está permitida. Esto es normal e intencional.
+          </div>
+        </div>
+
+        <div class="card card-good">
+          <div class="flex items-center gap-3 mb-2">
+            <span class="p-2 bg-blue-100 text-[#0077C9] rounded-lg text-lg">📋</span>
+            <h3>Paso 2 — Lista de confianza permitida</h3>
+          </div>
+          <p class="text-xs text-slate-600 leading-relaxed mb-3">
+            Únicamente habilitaremos dominios de clientes, proveedores y socios estratégicos que requieran de tu colaboración.
+          </p>
+          <div class="bg-[#0077C9]/10 text-[#0077C9] border border-[#0077C9]/20 text-[11px] p-2 rounded font-semibold">
+            🔗 ¿Necesitas comunicarte con alguien externo bloqueado? Escribe al Centro de Ayuda solicitando el alta del dominio.
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- GOLDEN RULE WARNING BOX -->
+    <section class="px-10 py-4">
+      <div class="alert-box">
+        <div class="text-4xl">🌟</div>
+        <div>
+          <span class="title">REGLA DE ORO DE SEGURIDAD</span>
+          <p class="text-sm text-white/90">
+            Si alguien en Teams te pide dinero, transferencias bancarias o datos confidenciales, <strong>no actúes bajo presión</strong>. Detente, toma el teléfono y haz una llamada directa de voz para confirmar la solicitud. No importa la urgencia ni quién diga ser.
+          </p>
+        </div>
+      </div>
+    </section>
+
+    <!-- FOOTER -->
+    <footer class="footer-custom">
+        <div class="footer-logo">
+            <img src="https://unkilodeayuda.org.mx/UKA_F_Inst_fa_RGB.png" alt="Logo Un Kilo de Ayuda">
+        </div>
+
+        <div class="footer-content">
+            <h2 style="color: var(--uka-yellow); font-weight: 800; text-transform: uppercase; margin-bottom: 10px;">
+                ¿Necesitas Soporte Técnico?
+            </h2>
+            <p style="margin-bottom: 25px;">
+                Nuestro equipo de TI está listo para ayudarte y resolver cualquier duda técnica.
+            </p>
+
+            <a href="https://forms.office.com/r/6Ch6uvkgHK" target="_blank" class="btn-reporte">
+                INGRESA UN TICKET
+            </a>
+
+            <div style="font-size: 0.8rem; opacity: 0.85; border-top: 1px solid rgba(255,255,255,0.15); padding-top: 20px; margin-top: 30px;">
+                <p>Un Kilo de Ayuda &copy; 2026 | Tecnologías de la Información</p>
+                <span class="footer-tag">#UKATips</span>
+            </div>
+        </div>
+    </footer>
+
+  </div>
+
+  <!-- SISTEMA INTERACTIVO -->
+  <script>
+    // Configuración de los puntos del simulador
+    const infoHotspots = {
+      1: {
+        icon: "🏷️",
+        title: "Remitente Externo no Legítimo",
+        desc: "Aunque el avatar diga 'Juan Pérez (CEO)', la presencia de la etiqueta obligatoria 'Externo' y una dirección de correo externa revela de forma inequívoca que se trata de un atacante suplantando la identidad desde fuera de la organización."
+      },
+      2: {
+        icon: "⚠️",
+        title: "Avisos de Advertencia Oficiales",
+        desc: "Nunca pases por alto estas alertas de Microsoft. Si una persona supuestamente interna de tu empresa provoca un cartel que dice que proviene de fuera de la organización, detén el chat por completo y reporta."
+      },
+      3: {
+        icon: "💬",
+        title: "Sondeo Informal Inicial",
+        desc: "Los estafadores suelen iniciar con un sencillo '¿Estás ahí?' o '¿Cómo va lo de ayer?'. Buscan evaluar tu disposición de respuesta rápida y generar confianza inicial sin entregar detalles que delaten su ignorancia operativa."
+      },
+      4: {
+        icon: "🚨",
+        title: "Urgencia y Coacción Financiera",
+        desc: "Las transferencias monetarias rápidas alegando 'asuntos urgentes con clientes' o 'cerrar tratos ya' son el patrón número uno de robo. No realices ninguna acción financiera sin validación directa."
+      }
+    };
+
+    // Actualizar el visualizador de los Hotspots
+    function viewHotspot(id) {
+      const data = infoHotspots[id];
+      const card = document.getElementById("hotspot-card");
+      const icon = document.getElementById("card-icon");
+      const title = document.getElementById("card-title");
+      const desc = document.getElementById("card-desc");
+
+      // Transición animada
+      card.style.opacity = '0';
+      card.style.transform = 'scale(0.98)';
+
+      setTimeout(() => {
+        icon.innerText = data.icon;
+        title.innerText = data.title;
+        desc.innerText = data.desc;
+        card.style.opacity = '1';
+        card.style.transform = 'scale(1)';
+      }, 150);
+    }
+
+    // Toggle de las tarjetas de ejemplo (Flip / Reveal content)
+    const originalExamples = {
+      1: { title: "Usa lenguaje genérico", desc: "Hacen preguntas abiertas esperando que tú reveles detalles clave que ellos no conocen." },
+      2: { title: "Crea urgencia financiera", desc: "Buscan evitar que pienses o que verifiques con tu superior mediante la manipulación psicológica." },
+      3: { title: "Solicitud de contactos clave", desc: "Intentan escalar el fraude para dar con los responsables directos de las cuentas de dinero." },
+      4: { title: "Español no natural", desc: "En vez de usar expresiones internas comunes (como \"¿estás en la chamba?\"), usan fórmulas frías de traductores." }
+    };
+
+    const expandedExamples = {
+      1: { title: "¡Cuidado!", desc: "Señales reales de alerta: Si el remitente pregunta '¿Qué tal va el trámite?' o '¿Cómo cerramos?' sin decir de qué proyecto habla, busca que tú reveles los datos reales." },
+      2: { title: "¡Peligro de estafa!", desc: "La presión psicológica es vital para el atacante. El apuro de '¡el cliente cancelará el contrato si no enviamos ya!' es síntoma clásico de phishing." },
+      3: { title: "¡Intento de escalamiento!", desc: "Intentarán saltar tus filtros pidiéndote 'agregar con urgencia' al responsable de cuentas para poder atacarlo directamente bajo tu supuesta recomendación." },
+      4: { title: "¡Falta de modismos!", desc: "Usan '¿Estás en la empresa ahorita?' o español frío. La gente real en tu oficina tiene patrones conocidos de habla. Si suena robótico, investiga." }
+    };
+
+    let cardStates = { 1: false, 2: false, 3: false, 4: false };
+
+    function toggleExample(id) {
+      const isExpanded = cardStates[id];
+      const titleElement = document.getElementById(`ex-title-${id}`);
+      const descElement = document.getElementById(`ex-desc-${id}`);
+      const boxElement = document.getElementById(`ex-box-${id}`);
+
+      if (!isExpanded) {
+        titleElement.innerText = expandedExamples[id].title;
+        descElement.innerText = expandedExamples[id].desc;
+        boxElement.innerText = "🛑";
+        cardStates[id] = true;
+      } else {
+        titleElement.innerText = originalExamples[id].title;
+        descElement.innerText = originalExamples[id].desc;
+        boxElement.innerText = id === 1 ? "💬" : id === 2 ? "💸" : id === 3 ? "🔍" : "🗣️";
+        cardStates[id] = false;
+      }
+    }
+  </script>
+</body>
+</html>
